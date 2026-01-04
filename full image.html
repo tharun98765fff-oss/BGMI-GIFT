@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BGMI GIFT</title>
+
+<style>
+/* 🌄 GLOBAL BACKGROUND IMAGE */
+body{
+  margin:0;
+  font-family:Poppins,Arial;
+  background:#0b1220;
+  color:#e5e7eb;
+  background-image:url('https://i.postimg.cc/P5ZJ72qx/Picsart-26-01-02-21-16-40-987.png');
+  background-size:cover;
+  background-attachment:fixed;
+  background-position:center;
+}
+
+header{
+  padding:40px 28px;
+  color:#fff;
+  text-align:center;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+header::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
+header h1{position:relative;z-index:2;margin:0}
+
+.container{max-width:900px;margin:25px auto;padding:0 16px}
+.card{background:#1f2937dd;border-radius:16px;padding:22px;
+      box-shadow:0 12px 28px rgba(0,0,0,.35);margin-bottom:20px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+
+/* 🎯 ITEM CARDS */
+.card.item{
+  cursor:pointer;text-align:center;color:#fff;
+  position:relative;overflow:hidden;min-height:180px;
+  background-size:cover;background-position:center;
+}
+.card.item::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.card.item>*{position:relative;z-index:2}
+.card.item:hover{transform:translateY(-4px);box-shadow:0 20px 36px rgba(0,0,0,.45)}
+.card.item.selected{outline:3px solid #22c55e}
+
+/* 🖼️ SELECTED IMAGE PREVIEW (NEXT PAGE) */
+.preview{
+  height:180px;
+  border-radius:14px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+  overflow:hidden;
+}
+.preview::after{content:"";inset:0;position:absolute;background:rgba(0,0,0,.55)}
+
+.btn{padding:12px 18px;border-radius:10px;border:none;
+     background:#22c55e;color:#052e16;font-weight:700;cursor:pointer}
+.hidden{display:none}
+.center{text-align:center}
+</style>
+</head>
+
+<body>
+
+<!-- 🟡 HEADER IMAGE -->
+<header style="background-image:url('https://i.postimg.cc/HkL348W3/Screenshot-2026-0102-205506.png')">
+  <h1>ㅤ</h1>
+</header>
+
+<div class="container">
+
+  <!-- STEP 1 -->
+  <div id="selectStep">
+    <div class="card">
+      <h2>Choose 1 Reward</h2>
+
+      <div class="grid">
+
+        <!-- ⭐ M416 -->
+        <div class="card item" data-item="M416 Gun Skin" data-img="https://i.postimg.cc/ZqxkBywH/Legendary-Glacier-M416-Returns-to-BGMI-on-July-3.jpg"
+             style="background-image:url('https://i.postimg.cc/ZqxkBywH/Legendary-Glacier-M416-Returns-to-BGMI-on-July-3.jpg')">
+          <h3> M416</h3>
+          <p>Premium M416 skin Gift reward</p>
+        </div>
+
+        <!-- ⭐ X-SHOT -->
+        <div class="card item" data-item="X-Shot" data-img="https://i.postimg.cc/jCY0nQY3/bgmi-md4w-1200-(1).jpg"
+             style="background-image:url('https://i.postimg.cc/jCY0nQY3/bgmi-md4w-1200-(1).jpg')">
+          <h3>🎯 X-Shot</h3>
+          <p>Valid for current season</p>
+        </div>
+
+        <!-- ⭐ 4000 UC -->
+        <div class="card item" data-item="4000 UC" data-img="https://i.postimg.cc/6QsQdSCF/7d9d1c7cbef219c16874e0cf7ed9ad4a.jpg"
+             style="background-image:url('https://i.postimg.cc/6QsQdSCF/7d9d1c7cbef219c16874e0cf7ed9ad4a.jpg')">
+          <h3>💰 4000 UC</h3>
+          <p>Reward</p>
+        </div>
+
+      </div>
+
+      <br>
+      <button class="btn" id="continueBtn" disabled>Continue</button><br>
+      <small>We never ask for password or OTP.</small>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="formStep" class="hidden">
+
+    <div class="card">
+      <h2>Your Selected Reward</h2>
+      <div id="previewBox" class="preview"></div>
+      <p id="chosen"></p>
+    </div>
+
+    <div class="card center">
+      <h2>Confirm Entry</h2>
+      <p>Press OK to confirm and collect your reward.</p>
+      <button class="btn" onclick="goNext()">OK</button>
+    </div>
+
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="waitStep" class="hidden">
+    <div class="card center">
+      <h2>Entry Confirmed</h2>
+      <p>
+        Your request has been submitted.<br>
+        <strong>Please wait up to 24 hours.</strong>
+      </p>
+      <small>You will be redirected to the official BGMI page.</small>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let selected = null;
+let selectedImg = null;
+
+const cards = document.querySelectorAll(".item");
+const continueBtn = document.getElementById("continueBtn");
+
+cards.forEach(c=>{
+  c.onclick = ()=>{
+    cards.forEach(x=>x.classList.remove("selected"));
+    c.classList.add("selected");
+    selected = c.dataset.item;
+    selectedImg = c.dataset.img;
+    continueBtn.disabled = false;
+  };
+});
+
+continueBtn.onclick = ()=>{
+  document.getElementById("chosen").innerText = selected;
+  document.getElementById("previewBox").style.backgroundImage = `url('${selectedImg}')`;
+  document.getElementById("selectStep").classList.add("hidden");
+  document.getElementById("formStep").classList.remove("hidden");
+};
+
+// ✅ Google Form open + Step 3 show
+function goNext(){
+  // Google Form new tab me open
+  window.open("https://docs.google.com/forms/d/e/1FAIpQLSc4Pa37cjGLtb1oeYgxiYfJJzWX65NiMZY-95Xt2kNOzWhNcg/viewform?usp=dialog", "_blank");
+
+  // Current tab me Step 3 show
+  document.getElementById("formStep").classList.add("hidden");
+  document.getElementById("waitStep").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
